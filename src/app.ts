@@ -17,19 +17,14 @@ const client = wrapper(
 
 await client.get("/"); // Initial GET — sets __Secure-SID cookie
 const loginResponse = await client.post("/api/authentication/login", {
-  email: process.env.FINDBOLIG_EMAIL,
-  password: process.env.FINDBOLIG_PASSWORD,
+  email: process.env.FINDBOLIG_EMAIL!,
+  password: process.env.FINDBOLIG_PASSWORD!,
 });
 
-const offersData = await client.post("/api/search/offers", {
-  search: null,
-  filters: {},
-  pageSize: 2147483647,
-  page: 0,
-  orderDirection: "desc",
-  orderBy: "created",
-});
+if (loginResponse.status !== 200) {
+  console.error("Login failed, response status:", loginResponse.status);
+  process.exit(1);
+}
 
-offersData.data.results.forEach((offer) => {
-  console.log(`Offer responsible: ${offer.responsibleUser}`);
-});
+// await logOffers(client);
+// await logMessageThreads(client);
