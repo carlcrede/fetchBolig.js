@@ -6,7 +6,7 @@ import { wrapper } from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
 import type { ApiOffersPage } from "./features/offers/api.types.js";
 import { apiOfferToDomain } from "./features/offers/domain.js";
-
+import { upsertOffers } from "./features/offers/repository.js";
 const jar = new CookieJar();
 const client = wrapper(
   axios.create({
@@ -18,6 +18,7 @@ const client = wrapper(
 );
 
 await client.get("/"); // Initial GET — sets __Secure-SID cookie
+process.stdout.write("\nAuthenticating...");
 const loginResponse = await client.post("/api/authentication/login", {
   email: process.env.FINDBOLIG_EMAIL!,
   password: process.env.FINDBOLIG_PASSWORD!,
@@ -26,6 +27,8 @@ const loginResponse = await client.post("/api/authentication/login", {
 if (loginResponse.status !== 200) {
   console.error("Login failed, response status:", loginResponse.status);
   process.exit(1);
+} else {
+  process.stdout.write(" OK\n");
 }
 
 const offersData = await client.post<ApiOffersPage>("/api/search/offers", {
@@ -38,4 +41,8 @@ const offersData = await client.post<ApiOffersPage>("/api/search/offers", {
 });
 
 const offers = apiOfferToDomain(offersData.data.results);
-console.log(offers[0].id);
+
+// Persist offers to database via repository (keeps app.ts small and focused)
+await upsertOffers(offers);
+
+if (offers.length > 0) console.log(offers[0].id);
