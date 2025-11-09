@@ -1,6 +1,6 @@
+import { db } from "@/db/client.js";
+import { offer } from "@/db/schema.js";
 import { eq } from "drizzle-orm";
-import { db } from "../../db/client.js";
-import { offer } from "../../db/schema.js";
 import type { Offer } from "./domain.js";
 import { domainOfferToDb } from "./domain.js";
 

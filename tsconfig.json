@@ -5,6 +5,10 @@
     "moduleResolution": "nodenext",
     "outDir": "./dist",
     "skipLibCheck": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   }
 }
