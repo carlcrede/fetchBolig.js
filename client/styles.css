@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .offer-card {
+    @apply border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow bg-white;
+  }
+
+  .thread-card {
+    @apply border border-purple-200 rounded-lg p-4 hover:shadow-md transition-shadow bg-white;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium;
+  }
+
+  .tab-button {
+    @apply px-4 py-2 text-gray-600 border-b-2 border-transparent hover:text-gray-900 hover:border-gray-300 transition-colors;
+  }
+
+  .tab-button.active {
+    @apply text-blue-600 border-blue-600 font-medium;
+  }
+}

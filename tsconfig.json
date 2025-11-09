@@ -3,12 +3,15 @@
     "target": "es2024",
     "module": "nodenext",
     "moduleResolution": "nodenext",
+    "lib": ["es2024", "dom"],
     "outDir": "./dist",
     "skipLibCheck": true,
     "sourceMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
-  }
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "baseUrl": "."
+  },
+  "include": ["server/**/*", "client/**/*", "types/**/*", "lib/**/*"],
+  "exclude": ["node_modules", "dist", "public"]
 }

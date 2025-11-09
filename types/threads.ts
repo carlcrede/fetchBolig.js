@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// API schema from findbolig.nu
 export const ApiMessage = z.object({
   sender: z.object({ id: z.string(), name: z.string() }).optional(),
   receiver: z.object({ id: z.string(), name: z.string() }).optional(),
@@ -12,7 +13,7 @@ export const ApiMessage = z.object({
 
 export type ApiMessage = z.infer<typeof ApiMessage>;
 
-export const ApiMessageThreadItem = z.object({
+export const ApiMessageThread = z.object({
   id: z.string(),
   relatedEntity: z.string().nullable(),
   relatedEntityType: z.string().nullable(),
@@ -23,7 +24,7 @@ export const ApiMessageThreadItem = z.object({
   lastMessage: ApiMessage.optional(),
 });
 
-export type ApiMessageThreadItem = z.infer<typeof ApiMessageThreadItem>;
+export type ApiMessageThread = z.infer<typeof ApiMessageThread>;
 
 export const ApiMessageThreadsPage = z.object({
   hasPublisherRole: z.boolean().optional(),
@@ -31,7 +32,27 @@ export const ApiMessageThreadsPage = z.object({
   totalResults: z.number().optional(),
   page: z.number().optional(),
   pageSize: z.number().optional(),
-  results: z.array(ApiMessageThreadItem),
+  results: z.array(ApiMessageThread),
 });
 
 export type ApiMessageThreadsPage = z.infer<typeof ApiMessageThreadsPage>;
+
+// Domain models (used in client and server)
+export type Message = {
+  id: string;
+  threadId: string;
+  body: string;
+  createdAt: Date;
+  author?: string | null;
+};
+
+export type MessageThread = {
+  id: string;
+  relatedEntity: string | null;
+  relatedEntityType?: string | null;
+  hasUnreadMessages?: boolean;
+  hasAttachments?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  lastMessage?: Message | null;
+};
