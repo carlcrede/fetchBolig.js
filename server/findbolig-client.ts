@@ -2,8 +2,8 @@ import "dotenv/config";
 import fetchCookie from "fetch-cookie";
 import { CookieJar } from "tough-cookie";
 import { fetch as undiciFetch } from "undici";
-import type { ApiOffersPage } from "../shared/types/offers.js";
-import type { ApiMessageThreadsPage } from "../shared/types/threads.js";
+import type { ApiOffersPage } from "./types/offers";
+import type { ApiMessageThreadsPage } from "./types/threads";
 
 // Disable TLS verification for development (remove in production)
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
@@ -87,4 +87,36 @@ export async function fetchThreads(): Promise<ApiMessageThreadsPage> {
   }
 
   return (await res.json()) as ApiMessageThreadsPage;
+}
+
+export async function getPositionOnOffer(offerId: string) {
+  const res = await fetch(`${BASE_URL}/api/search/waiting-lists/applicants/position-on-offer/${offerId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch position on offer: ${res.status}: ${res.statusText}`);
+  }
+
+  return res.json();
+}
+
+export async function getUserData() {
+  const res = await fetch(`${BASE_URL}/api/users/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch user data: ${res.status}`);
+  }
+
+  return res.json();
 }
